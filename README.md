@@ -26,66 +26,23 @@ This project transitions a single-file interactive prototype into a clean, moder
 
 ---
 
-## Local Development Setup
+## Author
 
-### Prerequisites
+Built by [ameer<3](https://github.com/envyxyz)
 
-*   [Node.js](https://nodejs.org/) (v18 or higher)
-*   [Docker & Docker Compose](https://www.docker.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-envyxyz-1d1b20?style=flat-square&logo=github)](https://github.com/envyxyz)
 
-### 1. Clone & Install Dependencies
+## License
 
-```bash
-npm install
-```
-
-### 2. Launch Local Database & Cache Services
-
-Spin up the local PostgreSQL database and Redis caching container:
-
-```bash
-docker compose up -d
-```
-
-### 3. Setup Database Schema (Prisma)
-
-Apply migrations and synchronize database schemas:
-
-```bash
-npx prisma db push
-```
-
-### 4. Run Development Server
-
-```bash
-npm run dev
-```
-
-The server will start running on **[http://localhost:3000](http://localhost:3000)**.
-To access the live proposal editor prototype, navigate directly to **[http://localhost:3000/preview.html](http://localhost:3000/preview.html)**.
+MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 📦 Deploying to GitHub Pages (Static Export)
+<div align="center">
 
-If you wish to host the Proposal Studio frontend prototype statically on **GitHub Pages**, configure Next.js for static export:
+If Proposal Studio saves you time, consider leaving a star.
 
-1. Open `next.config.ts` and set `output: 'export'`:
-   ```typescript
-   import type { NextConfig } from "next";
+[![Star](https://img.shields.io/github/stars/envyxyz/proposal-studio?style=social)](https://github.com/envyxyz/proposal-studio/stargazers)
 
-   const nextConfig: NextConfig = {
-     output: "export",
-     images: {
-       unoptimized: true, // Required for static export
-     },
-   };
-
-   export default nextConfig;
-   ```
-2. Build the project:
-   ```bash
-   npm run build
-   ```
-   This compiles the application and outputs a static folder called `/out`.
-3. Upload the contents of the `/out` directory directly to your GitHub repository's hosting branch (`gh-pages`), or use Vercel/Netlify for serverless hosting.
+</div>
+```
