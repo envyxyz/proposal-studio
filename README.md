@@ -45,4 +45,3 @@ If Proposal Studio saves you time, consider leaving a star.
 [![Star](https://img.shields.io/github/stars/envyxyz/proposal-studio?style=social)](https://github.com/envyxyz/proposal-studio/stargazers)
 
 </div>
-```
