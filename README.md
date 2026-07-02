@@ -6,7 +6,7 @@ This project transitions a single-file interactive prototype into a clean, moder
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 *   **Multi-Page Interactive Builder:** Compile full multi-page proposals including cover pages, project scope, timelines, invoice sheets, and e-signature modules.
 *   **Sandboxed Design System:** Customize layout styles (typography scales, heading fonts, title styling, background color, accent colors, and line borders) completely scoped to the document canvas. The app shell (toolbar, settings panel, menus) remains clean, unaffected, and optimized.
@@ -17,7 +17,7 @@ This project transitions a single-file interactive prototype into a clean, moder
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 *   **Frontend:** Next.js 16 (App Router) / React 19 / Tailwind CSS v4
 *   **Database & ORM:** PostgreSQL / Redis / Prisma ORM
@@ -26,7 +26,7 @@ This project transitions a single-file interactive prototype into a clean, moder
 
 ---
 
-## 💻 Local Development Setup
+## Local Development Setup
 
 ### Prerequisites
 
