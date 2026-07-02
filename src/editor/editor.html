@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposal Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="toolbar">
+    <div class="toolbar-title">Proposal Studio</div>
+    <div class="toolbar-actions">
+      <button class="btn-ghost btn" id="logoUploadBtn">Logo</button>
+      <input type="file" id="logoUpload" accept="image/*" style="display:none;">
+      <button class="btn-ghost btn" id="pagesToggle">Pages</button>
+      <button class="btn-ghost btn" id="designToggle">Design</button>
+      <button class="btn-ghost btn" id="exportBtn">Export</button>
+      <button class="btn-ghost btn" id="importBtn">Import</button>
+      <input type="file" id="importFile" accept=".json" style="display:none;">
+      <button class="btn-ghost btn" id="clearAll">Clear</button>
+      <button class="btn btn-primary" id="downloadBtn">Download PDF</button>
+    </div>
+  </div>
+
+  <div class="settings-panel" id="settingsPanel">
+    <!-- Typography -->
+    <div class="settings-divider">Typography</div>
+    <div class="settings-group">
+      <label>Body Font</label>
+      <select id="fontSelect">
+        <option value="'Inter',sans-serif">Inter</option>
+        <option value="'Space Grotesk',sans-serif">Space Grotesk</option>
+        <option value="'Lora',serif">Lora</option>
+        <option value="'IBM Plex Mono',monospace">IBM Plex Mono</option>
+        <option value="__custom__">+ Custom Google Font…</option>
+      </select>
+    </div>
+    <div class="settings-group">
+      <label>Heading Font</label>
+      <select id="headingFontSelect">
+        <option value="'Archivo Black',sans-serif">Archivo Black</option>
+        <option value="'Space Grotesk',sans-serif">Space Grotesk</option>
+        <option value="'Lora',serif">Lora</option>
+        <option value="'IBM Plex Mono',monospace">IBM Plex Mono</option>
+        <option value="__custom__">+ Custom Google Font…</option>
+      </select>
+    </div>
+    <div class="settings-group">
+      <label>Body Weight</label>
+      <select id="bodyWeightSelect">
+        <option value="400">Regular</option>
+        <option value="500">Medium</option>
+        <option value="600">Semibold</option>
+        <option value="700">Bold</option>
+      </select>
+    </div>
+    <div class="settings-group">
+      <label>Heading Weight</label>
+      <select id="headingWeightSelect">
+        <option value="400">Regular</option>
+        <option value="500">Medium</option>
+        <option value="600">Semibold</option>
+        <option value="700">Bold</option>
+      </select>
+    </div>
+
+    <!-- Sizing -->
+    <div class="settings-divider">Sizing</div>
+    <div class="settings-group">
+      <label>Page Title Size</label>
+      <select id="titleSizeSelect">
+        <option value="0.85">Small</option>
+        <option value="1" selected>Default</option>
+        <option value="1.15">Large</option>
+        <option value="1.3">Extra Large</option>
+      </select>
+    </div>
+    <div class="settings-group">
+      <label>Heading Size</label>
+      <select id="headingSizeSelect">
+        <option value="0.85">Small</option>
+        <option value="1" selected>Default</option>
+        <option value="1.15">Large</option>
+        <option value="1.3">Extra Large</option>
+      </select>
+    </div>
+    <div class="settings-group">
+      <label>Body Size</label>
+      <select id="bodySizeSelect">
+        <option value="0.85">Small</option>
+        <option value="1" selected>Default</option>
+        <option value="1.15">Large</option>
+        <option value="1.3">Extra Large</option>
+      </select>
+    </div>
+
+    <!-- Spacing -->
+    <div class="settings-divider">Spacing</div>
+    <div class="settings-group">
+      <label>Letter Spacing</label>
+      <select id="letterSpacingSelect">
+        <option value="0.4">Tight</option>
+        <option value="1" selected>Default</option>
+        <option value="2">Wide</option>
+        <option value="3.5">Extra Wide</option>
+      </select>
+    </div>
+    <div class="settings-group">
+      <label>Line Spacing</label>
+      <select id="lineSpacingSelect">
+        <option value="0.85">Tight</option>
+        <option value="1" selected>Default</option>
+        <option value="1.2">Relaxed</option>
+        <option value="1.4">Loose</option>
+      </select>
+    </div>
+    <div class="settings-group">
+      <label>Divider Spacing</label>
+      <select id="dividerSpacingSelect">
+        <option value="0.5">Tight</option>
+        <option value="1" selected>Default</option>
+        <option value="1.5">Relaxed</option>
+        <option value="2">Loose</option>
+      </select>
+    </div>
+
+    <!-- Colors & Layout -->
+    <div class="settings-divider">Colors &amp; Layout</div>
+    <div class="settings-group">
+      <label>Body Text Color</label>
+      <input type="color" id="textColorPicker" value="#18140F">
+    </div>
+    <div class="settings-group">
+      <label>Title Color</label>
+      <input type="color" id="titleColorPicker" value="#18140F">
+    </div>
+    <div class="settings-group">
+      <label>Heading Color</label>
+      <input type="color" id="headingColorPicker" value="#18140F">
+    </div>
+    <div class="settings-group">
+      <label>Accent Color</label>
+      <input type="color" id="accentColorPicker" value="#18140F">
+    </div>
+    <div class="settings-group">
+      <label>Divider Color</label>
+      <input type="color" id="dividerColorPicker" value="#DAD2C4">
+    </div>
+    <div class="settings-group">
+      <label>Background (Paper)</label>
+      <input type="color" id="bgColorPicker" value="#F5F0E8">
+    </div>
+
+    <!-- Currency -->
+    <div class="settings-divider">Invoice</div>
+    <div class="settings-group">
+      <label>Currency Symbol</label>
+      <select id="currencySelect">
+        <option value="$" selected>$ — USD</option>
+        <option value="£">£ — GBP</option>
+        <option value="€">€ — EUR</option>
+        <option value="¥">¥ — JPY / CNY</option>
+        <option value="₹">₹ — INR</option>
+        <option value="₨">₨ — PKR</option>
+        <option value="A$">A$ — AUD</option>
+        <option value="C$">C$ — CAD</option>
+        <option value="CHF">CHF — Swiss Franc</option>
+        <option value="R">R — ZAR</option>
+        <option value="__custom__">+ Custom…</option>
+      </select>
+    </div>
+
+    <button class="settings-reset" id="settingsReset">Reset</button>
+  </div>
+
+  <div class="page-manager" id="pageManager">
+    <div class="page-manager-title">Reorder or hide pages</div>
+    <div class="pm-list" id="pmList"></div>
+  </div>
+
+  <div class="page-nav" id="pageNav"></div>
+
+  <div class="canvas-wrap">
+
+    <!-- ============ COVER ============ -->
+    <section class="page active" data-page="cover">
+      <div class="mark" contenteditable="true">✝</div>
+      <div style="height:100%;min-height:900px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+        <div style="font-family:var(--font-heading);font-weight:var(--font-weight-heading);color:var(--title-color);font-size:calc(96px * var(--title-size-scale));line-height:0.9;letter-spacing:calc(-1.5px * var(--letter-spacing-scale));text-transform:uppercase;" contenteditable="true" data-placeholder="PROPOSAL">WEB DESIGN<br>PROPOSAL</div>
+        <div class="collapsible" style="margin-top:40px;font-family:var(--font-body);font-size:calc(13.5px * var(--body-size-scale));line-height:1.6;max-width:340px;" contenteditable="true" data-placeholder="Short intro line about this proposal.">A tailored proposal outlining scope, timeline, and investment for your new website.</div>
+      </div>
+      <div style="position:absolute;bottom:60px;left:60px;right:60px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray);padding-bottom:20px;">
+        <span contenteditable="true" data-placeholder="Prepared for [Client Name]">Prepared for [Client Name]</span>
+        <span contenteditable="true" data-placeholder="03/04/2024">03/04/2024</span>
+      </div>
+      <div class="footer-editable" contenteditable="true" data-placeholder="FRENCH STUDIO">FRENCH STUDIO</div>
+    </section>
+
+    <!-- ============ WELCOME ============ -->
+    <section class="page" data-page="welcome">
+      <div class="mark" contenteditable="true">✝</div>
+      <div class="head-block">
+        <div class="head-title" contenteditable="true" data-placeholder="WELCOME">WELCOME</div>
+        <div class="head-note">
+          <div class="greet" contenteditable="true" data-placeholder="Hey [Client Name],">Hey [Client Name],</div>
+          <div class="collapsible" contenteditable="true" data-placeholder="Intro paragraph.">Thank you for choosing to work with me. I'm excited to collaborate with you and bring your ideas to life. This document outlines what we'll accomplish, how we'll work together, and what to expect.</div>
+        </div>
+      </div>
+
+      <div id="welcomeRows">
+        <!-- dynamic rows inserted here by JS -->
+      </div>
+      <button class="add-row-btn" id="addWelcomeRow">+ Add Section</button>
+      <div class="footer-editable" contenteditable="true" data-placeholder="FRENCH STUDIO">FRENCH STUDIO</div>
+    </section>
+
+    <!-- ============ SERVICE SCOPE ============ -->
+    <section class="page" data-page="scope">
+      <div class="mark" contenteditable="true">✝</div>
+      <div class="head-block">
+        <div class="head-title" contenteditable="true" data-placeholder="SERVICE SCOPE">SERVICE<br>SCOPE</div>
+        <div class="head-note" contenteditable="true" data-placeholder="Short scope intro.">
+          Everything included in this project, broken down by service.
+        </div>
+      </div>
+      <div id="scopeRows"></div>
+      <button class="add-row-btn" id="addScopeRow">+ Add Service</button>
+      <div class="footer-editable" contenteditable="true" data-placeholder="FRENCH STUDIO">FRENCH STUDIO</div>
+    </section>
+
+    <!-- ============ ADDITIONAL SERVICES ============ -->
+    <section class="page" data-page="additional-services">
+      <div class="mark" contenteditable="true">✝</div>
+      <div class="head-block" style="margin-bottom:20px;">
+        <div class="head-title" style="font-size:calc(42px * var(--title-size-scale));" contenteditable="true" data-placeholder="ADDITIONAL SERVICES">ADDITIONAL<br>SERVICES</div>
+        <div class="head-note" contenteditable="true" data-placeholder="Short intro.">
+          Enhance your store with additional services designed to help your business grow, operate smoothly, and stand out in the market.
+        </div>
+      </div>
+      <table class="inv-table">
+        <colgroup>
+          <col style="width:180px">
+          <col style="width:160px">
+          <col style="width:300px">
+          <col style="width:34px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="additionalRows"></tbody>
+      </table>
+      <button class="add-row-btn" id="addAdditionalRow">+ Add Service</button>
+      <div class="footer-bar-msg" contenteditable="true" data-placeholder="Closing note.">Custom solutions available. Contact us to discuss your needs.</div>
+    </section>
+
+    <!-- ============ WEBSITE GUIDE ============ -->
+    <section class="page" data-page="guide">
+      <div class="mark" contenteditable="true">✝</div>
+      <div class="head-block">
+        <div class="head-title" contenteditable="true" data-placeholder="WEBSITE GUIDE">WEBSITE<br>GUIDE</div>
+        <div class="head-note" contenteditable="true" data-placeholder="Guide intro.">
+          This guide is designed to help you understand, manage, and get the most out of your website with confidence.
+        </div>
+      </div>
+
+      <div id="guideRows">
+        <!-- dynamic rows inserted here by JS -->
+      </div>
+      <button class="add-row-btn" id="addGuideRow">+ Add Section</button>
+      <div class="footer-editable" contenteditable="true" data-placeholder="FRENCH STUDIO">FRENCH STUDIO</div>
+    </section>
+
+    <!-- ============ AGREEMENT ============ -->
+    <section class="page" data-page="agreement">
+      <div class="mark" contenteditable="true">✝</div>
+      <div class="agreement-cover">
+        <div class="agreement-title" contenteditable="true" data-placeholder="CLIENT AGREEMENT">CLIENT<br>AGREEMENT</div>
+        <div class="agreement-intro" contenteditable="true" data-placeholder="Agreement intro text.">
+          This agreement outlines the terms and conditions governing the working relationship between the developer and the client. It defines the scope of services, responsibilities, and expectations of both parties. By engaging in this partnership, both parties agree to be bound by this agreement. This document represents the full and complete understanding between both parties and supersedes any prior discussions, whether written or oral.
+        </div>
+        <div class="parties">
+          <div>
+            <div class="party-label">Created By</div>
+            <div class="party-value" contenteditable="true" data-placeholder="Your Name / Studio">Your Name</div>
+          </div>
+          <div>
+            <div class="party-label">Prepared For</div>
+            <div class="party-value" contenteditable="true" data-placeholder="[Client Name]">[Client Name]</div>
+            <div class="party-value" contenteditable="true" data-placeholder="[Business Name]">[Business Name]</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-editable" contenteditable="true" data-placeholder="FRENCH STUDIO">FRENCH STUDIO</div>
+    </section>
+
+    <!-- ============ INVOICE ============ -->
+    <section class="page" data-page="invoice">
+      <div class="inv-head">
+        <div class="inv-title" contenteditable="true" data-placeholder="INVOICE">INVOICE</div>
+        <div class="inv-meta">
+          <div contenteditable="true" data-placeholder="03/04/2024">03/04/2024</div>
+          <div contenteditable="true" data-placeholder="YOUR COMPANY NAME">YOUR COMPANY NAME</div>
+          <div contenteditable="true" data-placeholder="WEB DEVELOPMENT">WEB DEVELOPMENT</div>
+        </div>
+      </div>
+      <div class="inv-number">INVOICE # <b contenteditable="true" data-placeholder="0001">0001</b></div>
+
+      <div class="bill-row">
+        <div class="bill-col">
+          <div class="bill-label">From</div>
+          <div contenteditable="true" data-placeholder="Your address, phone, email">Your address&#10;Phone number&#10;Email</div>
+        </div>
+        <div class="bill-col" style="text-align:right;">
+          <div class="bill-label">Bill To</div>
+          <div contenteditable="true" data-placeholder="Client address, phone, email">Client address&#10;Phone number&#10;Email</div>
+        </div>
+      </div>
+
+      <table class="inv-table" id="invoiceTable">
+        <colgroup>
+          <col style="width:320px">
+          <col style="width:80px">
+          <col style="width:120px">
+          <col style="width:120px">
+          <col style="width:34px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Item Description</th>
+            <th class="num">Qty</th>
+            <th class="num">Price</th>
+            <th class="num">Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="invoiceRows"></tbody>
+      </table>
+      <button class="add-row-btn" id="addInvoiceRow">+ Add Line Item</button>
+
+      <!-- totals – full width aligned to inv-table -->
+      <div class="totals" style="margin-top:18px;">
+        <div class="totals-row"><span>Subtotal</span><span class="num" id="subtotalVal">$0.00</span></div>
+        <div class="totals-row">
+          <span>Tax (<span contenteditable="true" id="taxRate" data-placeholder="0">0</span>%)</span>
+          <span class="num" id="taxVal">$0.00</span>
+        </div>
+        <div class="totals-row grand"><span>Total</span><span class="num" id="grandVal">$0.00</span></div>
+      </div>
+
+      <div class="pay-section">
+        <div class="pay-col">
+          <div class="pay-title">Payment Will Be Accepted With</div>
+          <div id="paymentMethods"></div>
+          <button class="add-row-btn" id="addPaymentMethod" style="margin-top: 10px; width: auto; display: block; padding: 6px 12px; font-size: 10.5px;">+ Add Payment Method</button>
+        </div>
+        <div class="qr-wrapper" id="qrWrapper">
+          <div class="qr-box" id="qrBox">
+            <span id="qrBoxLabel">QR Code<br>(click to add)</span>
+            <span class="qr-hint">Click to upload</span>
+          </div>
+          <button class="qr-close-btn" id="qrCloseBtn" title="Remove QR Code">✕</button>
+          <input type="file" id="qrUpload" accept="image/*" style="display:none;">
+          <button class="qr-restore-btn" id="qrRestoreBtn">Restore QR Code</button>
+        </div>
+      </div>
+
+      <div class="terms-note" contenteditable="true" data-placeholder="Payment terms note.">
+        Payment is due within 7 days of the invoice date unless otherwise agreed. Late payments may incur additional fees and may result in a delay in services or deliverables. This invoice constitutes a binding agreement upon payment.
+      </div>
+      <div class="footer-editable" contenteditable="true" data-placeholder="FRENCH STUDIO">FRENCH STUDIO</div>
+    </section>
+
+    <!-- ============ THANK YOU ============ -->
+    <section class="page" data-page="thanks">
+      <div class="mark" contenteditable="true">✝</div>
+      <div class="ty-wrap">
+        <div class="ty-title" contenteditable="true" data-placeholder="THANK YOU">THANK YOU</div>
+        <div class="ty-sub" contenteditable="true" data-placeholder="Closing note.">Looking forward to working together and bringing this project to life. Reach out anytime with questions.</div>
+        <div class="ty-studio" contenteditable="true" data-placeholder="— Your Studio">— YOUR STUDIO</div>
+      </div>
+      <div class="footer-editable" contenteditable="true" data-placeholder="FRENCH STUDIO">FRENCH STUDIO</div>
+    </section>
+
+  </div>
+
+  <!-- Toast notification element -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>

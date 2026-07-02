@@ -1,0 +1,290 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProposalStatus {
+  draft
+  sent
+  viewed
+  signed
+  expired
+  archived
+}
+
+enum InvoiceStatus {
+  draft
+  sent
+  viewed
+  paid
+  partially_paid
+  overdue
+  cancelled
+}
+
+enum EventType {
+  proposal_created      @map("proposal.created")
+  proposal_updated      @map("proposal.updated")
+  proposal_sent         @map("proposal.sent")
+  proposal_viewed       @map("proposal.viewed")
+  proposal_signed       @map("proposal.signed")
+  proposal_expired      @map("proposal.expired")
+  proposal_archived     @map("proposal.archived")
+  invoice_created       @map("invoice.created")
+  invoice_sent          @map("invoice.sent")
+  invoice_viewed        @map("invoice.viewed")
+  invoice_paid          @map("invoice.paid")
+  invoice_reminder_sent @map("invoice.reminder_sent")
+  client_created        @map("client.created")
+  client_updated        @map("client.updated")
+}
+
+model Tenant {
+  id                   String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  slug                 String                @unique
+  plan                 String                @default("free")
+  stripeCustomerId     String?               @map("stripe_customer_id")
+  invoicePrefix        String                @default("INV") @map("invoice_prefix")
+  invoiceCounter       Int                   @default(0) @map("invoice_counter")
+  settings             Json                  @default("{}")
+  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamptz
+  users                User[]
+  clients              Client[]
+  proposals            Proposal[]
+  proposalVersions     ProposalVersion[]
+  templates            Template[]
+  signatures           Signature[]
+  invoices             Invoice[]
+  events               Event[]
+  assets               Asset[]
+  webhookSubscriptions WebhookSubscription[]
+
+  @@map("tenants")
+}
+
+model User {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String     @map("tenant_id") @db.Uuid
+  email         String     @unique
+  name          String
+  avatarUrl     String?    @map("avatar_url")
+  role          String     @default("owner")
+  emailVerified Boolean    @default(false) @map("email_verified")
+  lastLoginAt   DateTime?  @map("last_login_at") @db.Timestamptz
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+  tenant        Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  proposals     Proposal[]
+  templates     Template[]
+  invoices      Invoice[]
+  events        Event[]
+
+  @@index([tenantId])
+  @@map("users")
+}
+
+model Client {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String     @map("tenant_id") @db.Uuid
+  name          String
+  company       String?
+  email         String?
+  phone         String?
+  address       String?
+  notes         String?
+  brandSettings Json       @default("{}") @map("brand_settings")
+  tags          String[]   @default([])
+  archivedAt    DateTime?  @map("archived_at") @db.Timestamptz
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+  tenant        Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  proposals     Proposal[]
+  invoices      Invoice[]
+  events        Event[]
+
+  @@index([tenantId])
+  @@map("clients")
+}
+
+model Proposal {
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String            @map("tenant_id") @db.Uuid
+  userId         String            @map("user_id") @db.Uuid
+  clientId       String?           @map("client_id") @db.Uuid
+  templateId     String?           @map("template_id") @db.Uuid
+  title          String            @default("Untitled Proposal")
+  slug           String?           @unique
+  status         ProposalStatus    @default(draft)
+  content        Json              @default("{}")
+  designSettings Json              @default("{}") @map("design_settings")
+  pageOrder      Json              @default("[]") @map("page_order")
+  currencySymbol String            @default("$") @map("currency_symbol")
+  versionHash    String?           @map("version_hash")
+  sentAt         DateTime?         @map("sent_at") @db.Timestamptz
+  expiresAt      DateTime?         @map("expires_at") @db.Timestamptz
+  passwordHash   String?           @map("password_hash")
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime          @updatedAt @map("updated_at") @db.Timestamptz
+  tenant         Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user           User              @relation(fields: [userId], references: [id])
+  client         Client?           @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  template       Template?         @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  versions       ProposalVersion[]
+  signatures     Signature[]
+  invoices       Invoice[]
+  events         Event[]
+
+  @@index([tenantId])
+  @@index([clientId])
+  @@index([tenantId, status])
+  @@map("proposals")
+}
+
+model ProposalVersion {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  proposalId    String   @map("proposal_id") @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  content       Json
+  versionHash   String   @map("version_hash")
+  versionNumber Int      @map("version_number")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  proposal      Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([proposalId])
+  @@map("proposal_versions")
+}
+
+model Template {
+  id             String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String     @map("tenant_id") @db.Uuid
+  userId         String     @map("user_id") @db.Uuid
+  name           String
+  content        Json       @default("{}")
+  designSettings Json       @default("{}") @map("design_settings")
+  pageOrder      Json       @default("[]") @map("page_order")
+  isShared       Boolean    @default(false) @map("is_shared")
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+  tenant         Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user           User       @relation(fields: [userId], references: [id])
+  proposals      Proposal[]
+
+  @@index([tenantId])
+  @@map("templates")
+}
+
+model Signature {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  proposalId    String   @map("proposal_id") @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  signerName    String   @map("signer_name")
+  signerEmail   String?  @map("signer_email")
+  signatureType String   @default("draw") @map("signature_type")
+  signatureUrl  String   @map("signature_url")
+  ipAddress     String   @map("ip_address")
+  userAgent     String   @map("user_agent")
+  documentHash  String   @map("document_hash")
+  signedAt      DateTime @default(now()) @map("signed_at") @db.Timestamptz
+  proposal      Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([proposalId])
+  @@map("signatures")
+}
+
+model Invoice {
+  id                    String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId              String        @map("tenant_id") @db.Uuid
+  userId                String        @map("user_id") @db.Uuid
+  clientId              String?       @map("client_id") @db.Uuid
+  proposalId            String?       @map("proposal_id") @db.Uuid
+  invoiceNumber         String        @map("invoice_number")
+  status                InvoiceStatus @default(draft)
+  currencySymbol        String        @default("$") @map("currency_symbol")
+  lineItems             Json          @default("[]") @map("line_items")
+  paymentMethods        Json          @default("[]") @map("payment_methods")
+  subtotal              Decimal       @default(0) @db.Decimal(12, 2)
+  taxRate               Decimal       @default(0) @db.Decimal(5, 2) @map("tax_rate")
+  taxAmount             Decimal       @default(0) @db.Decimal(12, 2) @map("tax_amount")
+  total                 Decimal       @default(0) @db.Decimal(12, 2)
+  amountPaid            Decimal       @default(0) @db.Decimal(12, 2) @map("amount_paid")
+  dueDate               DateTime?     @map("due_date") @db.Timestamptz
+  paidAt                DateTime?     @map("paid_at") @db.Timestamptz
+  stripePaymentIntentId String?       @map("stripe_payment_intent_id")
+  stripeCheckoutUrl     String?       @map("stripe_checkout_url")
+  notes                 String?
+  createdAt             DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+  tenant                Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user                  User          @relation(fields: [userId], references: [id])
+  client                Client?       @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  proposal              Proposal?     @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+  events                Event[]
+
+  @@unique([tenantId, invoiceNumber])
+  @@index([tenantId])
+  @@index([clientId])
+  @@index([tenantId, status])
+  @@map("invoices")
+}
+
+model Event {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  proposalId String?   @map("proposal_id") @db.Uuid
+  invoiceId  String?   @map("invoice_id") @db.Uuid
+  clientId   String?   @map("client_id") @db.Uuid
+  userId     String?   @map("user_id") @db.Uuid
+  event      EventType
+  metadata   Json      @default("{}")
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  proposal   Proposal? @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  invoice    Invoice?  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  client     Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  user       User?     @relation(fields: [userId], references: [id])
+
+  @@index([tenantId])
+  @@index([proposalId])
+  @@index([invoiceId])
+  @@index([tenantId, createdAt(sort: Desc)])
+  @@map("events")
+}
+
+model Asset {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  filename   String
+  mimeType   String   @map("mime_type")
+  sizeBytes  Int      @map("size_bytes")
+  storageKey String   @map("storage_key")
+  url        String
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("assets")
+}
+
+model WebhookSubscription {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  url       String
+  events    String[] @default([])
+  secret    String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("webhook_subscriptions")
+}

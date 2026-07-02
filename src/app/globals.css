@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #101010;
+  --primary-active: #000000;
+  --on-primary: #F5F1E6;
+  --secondary: #2A0F16;
+  --ink: #101010;
+  --ink-secondary: #3A3630;
+  --ink-muted: #6E685F;
+  --ink-faint: #A39C90;
+  --canvas: #150A0D;
+  --canvas-soft: #1F1013;
+  --surface: #F5F1E6;
+  --surface-card: #F7F3E9;
+  --hairline: #101010;
+  --hairline-dark: #3A2A2E;
+  --accent-eyebrow: #D8D2C4;
+}
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-active: var(--primary-active);
+  --color-on-primary: var(--on-primary);
+  --color-secondary: var(--secondary);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-canvas: var(--canvas);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-surface: var(--surface);
+  --color-surface-card: var(--surface-card);
+  --color-hairline: var(--hairline);
+  --color-hairline-dark: var(--hairline-dark);
+  --color-accent-eyebrow: var(--accent-eyebrow);
+
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+}
+
+body {
+  background: var(--canvas);
+  color: var(--on-primary);
+  font-family: var(--font-sans);
+}
