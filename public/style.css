@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
 }
 
 .toolbar-title {
@@ -49,7 +49,7 @@
 }
 
 .btn {
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 12.5px;
   letter-spacing: 0.3px;
@@ -105,7 +105,7 @@
 }
 
 .page-tab {
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -166,7 +166,7 @@
 }
 
 .settings-divider {
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -189,7 +189,7 @@
 }
 
 .settings-group label {
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -198,7 +198,7 @@
 }
 
 .settings-group select {
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   background: #111;
   color: var(--white);
@@ -221,7 +221,7 @@
 
 .settings-reset {
   align-self: stretch;
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.3px;
@@ -937,7 +937,7 @@ td.svc-desc {
   left: 0;
   right: 0;
   height: 34px;
-  background: var(--black);
+  background: var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1005,7 +1005,7 @@ td.svc-desc {
   padding: 14px;
   width: 280px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
 }
 
 .page-manager.open {
@@ -1089,7 +1089,7 @@ td.svc-desc {
   transform: translateX(-50%) translateY(20px);
   background: #18140F;
   color: var(--white, #FDFBF7);
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -1118,8 +1118,7 @@ td.svc-desc {
   .settings-panel,
   .page-manager,
   .toast,
-  .remove-pay-btn,
-  #addPaymentMethod {
+  .remove-pay-btn {
     display: none !important;
   }
 

@@ -1,5 +1,5 @@
 {
-  "name": "next-app",
+  "name": "proposal-studio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "sync": "node -e \"const fs=require('fs'); fs.copyFileSync('src/editor/editor.html', 'public/preview.html'); fs.copyFileSync('src/editor/editor.css', 'public/style.css'); fs.copyFileSync('src/editor/editor.js', 'public/app.js');\""
   },
   "dependencies": {
     "@prisma/client": "^7.8.0",
+    "@vercel/speed-insights": "^2.0.0",
     "next": "16.2.10",
     "puppeteer": "^25.3.0",
     "react": "19.2.4",

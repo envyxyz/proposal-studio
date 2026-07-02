@@ -4,24 +4,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create, manage, and e-sign professional proposals">
   <title>Proposal Studio</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="editor-root">
 
   <div class="toolbar">
     <div class="toolbar-title">Proposal Studio</div>
     <div class="toolbar-actions">
-      <button class="btn-ghost btn" id="logoUploadBtn">Logo</button>
-      <input type="file" id="logoUpload" accept="image/*" style="display:none;">
-      <button class="btn-ghost btn" id="pagesToggle">Pages</button>
-      <button class="btn-ghost btn" id="designToggle">Design</button>
-      <button class="btn-ghost btn" id="exportBtn">Export</button>
-      <button class="btn-ghost btn" id="importBtn">Import</button>
-      <input type="file" id="importFile" accept=".json" style="display:none;">
-      <button class="btn-ghost btn" id="clearAll">Clear</button>
-      <button class="btn btn-primary" id="downloadBtn">Download PDF</button>
+      <button class="btn-ghost btn" id="logoUploadBtn" aria-label="Upload logo">Logo</button>
+      <input type="file" id="logoUpload" accept="image/*" style="display:none;" aria-hidden="true">
+      <button class="btn-ghost btn" id="pagesToggle" aria-label="Toggle pages manager">Pages</button>
+      <button class="btn-ghost btn" id="designToggle" aria-label="Toggle design settings">Design</button>
+      <button class="btn-ghost btn" id="exportBtn" aria-label="Export proposal data">Export</button>
+      <button class="btn-ghost btn" id="importBtn" aria-label="Import proposal data">Import</button>
+      <input type="file" id="importFile" accept=".json" style="display:none;" aria-hidden="true">
+      <button class="btn-ghost btn" id="clearAll" aria-label="Clear all content">Clear</button>
+      <button class="btn btn-primary" id="downloadBtn" aria-label="Download as PDF">Download PDF</button>
     </div>
   </div>
 
